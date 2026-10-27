@@ -110,7 +110,7 @@ fetch(URL_+'?t='+Math.floor(Date.now()/300000)).then(function(r){if(!r.ok)throw 
   else{
     $('ncu').textContent=c.length+'건';
     $('nct').className='';
-    $('nct').innerHTML='<table><tr><th>날짜(UTC)</th><th>이름</th><th>거리(LD)</th><th>속도</th><th>크기</th></tr>'+c.slice(0,20).map(function(x){return '<tr><td>'+esc(x.date.slice(5,16))+'</td><td>'+esc(x.des)+'</td><td>'+x.ld+'</td><td>'+x.v+'</td><td>'+(x.dm?(x.dm>=1000?(x.dm/1000).toFixed(1)+'km':x.dm+'m'):'–')+'</td></tr>'}).join('')+'</table>'+(c.length>20?'<div class="note">가까운 날짜순 상위 20건만 표시(전체 '+c.length+'건)</div>':'')
+    $('nct').innerHTML='<table><tr><th>날짜(UTC)</th><th>이름</th><th>거리(LD)</th><th>속도(km/s)</th><th>크기</th></tr>'+c.slice(0,20).map(function(x){return '<tr><td>'+esc(x.date.slice(5,17))+'</td><td>'+esc(x.des)+'</td><td>'+x.ld+'</td><td>'+x.v+'</td><td>'+(x.dm?(x.dm>=1000?(x.dm/1000).toFixed(1)+'km':x.dm+'m'):'–')+'</td></tr>'}).join('')+'</table>'+(c.length>20?'<div class="note">가까운 날짜순 상위 20건만 표시(전체 '+c.length+'건)</div>':'')
   }
 }).catch(function(e){$('swu').textContent='불러오기 실패';$('nct').textContent='데이터를 불러오지 못했습니다 ('+e.message+'). 첫 수집 전이거나 일시적 오류일 수 있습니다.'});
 </script>
