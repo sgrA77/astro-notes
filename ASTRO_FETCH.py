@@ -30,10 +30,10 @@ try:
         print("kp", len(out["kp"]))
 except Exception as e:
     out["err"].append("kp: %r" % e); print("kp fail", e)
-# 2) 태양풍 플라즈마 7일 -> 시간 평균
+# 2) 태양풍 실시간(최근 약 24시간, 1분 자료) -> 시간 평균
 try:
     w = None
-    for u in ("https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json", "https://services.swpc.noaa.gov/products/solar-wind/plasma-3-day.json", "https://services.swpc.noaa.gov/products/solar-wind/plasma-1-day.json", "https://services.swpc.noaa.gov/json/rtsw/rtsw_wind_1m.json"):
+    for u in ("https://services.swpc.noaa.gov/json/rtsw/rtsw_wind_1m.json",):
         w = get(u)
         if w: out["wind_src"] = u.split("/")[-1]; break
     if w:
@@ -48,7 +48,6 @@ try:
                 if spd in (None, ""): continue
                 h = hrs.setdefault(t, [0, 0, 0]); h[0] += float(spd); h[1] += float(den) if den not in (None, "") else 0; h[2] += 1
             except Exception: pass
-        out["dbg_wind"] = repr(w[:2]) + " n=" + str(len(w))
         out["wind"] = [[t + ":00", round(v[0] / v[2]), round(v[1] / v[2], 1)] for t, v in sorted(hrs.items())]
         print("wind", len(out["wind"]))
 except Exception as e:
