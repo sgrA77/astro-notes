@@ -44,6 +44,7 @@ try:
                 if spd in (None, ""): continue
                 h = hrs.setdefault(t, [0, 0, 0]); h[0] += float(spd); h[1] += float(den) if den not in (None, "") else 0; h[2] += 1
             except Exception: pass
+        out["dbg_wind"] = repr(w[:2]) + " n=" + str(len(w))
         out["wind"] = [[t + ":00", round(v[0] / v[2]), round(v[1] / v[2], 1)] for t, v in sorted(hrs.items())]
         print("wind", len(out["wind"]))
 except Exception as e:
