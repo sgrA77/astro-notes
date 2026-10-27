@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Astro Notes</title>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--ink:#0f172a;--mut:#64748b;--line:#e2e8f0;--acc:#4f46e5;--ok:#16a34a;--warn:#d97706;--bad:#dc2626;--bar:#6366f1}
+@media (prefers-color-scheme:dark){:root{--bg:#0b1020;--card:#131a2e;--ink:#e5e9f5;--mut:#94a3b8;--line:#243049;--acc:#818cf8;--ok:#4ade80;--warn:#fbbf24;--bad:#f87171;--bar:#818cf8}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+.wrap{max-width:760px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:24px;margin:8px 0 2px}
+.sub{color:var(--mut);margin:0 0 18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin:0 0 14px}
+.card h2{font-size:16px;margin:0 0 10px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.card h2 small{font-weight:400;color:var(--mut);font-size:12px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.kpi{border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.kpi .l{color:var(--mut);font-size:12px}
+.kpi .v{font-size:26px;font-weight:700;line-height:1.2}
+.kpi .s{font-size:12px;color:var(--mut)}
+.badge{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;font-weight:600;color:#fff}
+svg{width:100%;height:auto;display:block}
+.leg{font-size:12px;color:var(--mut);margin-top:6px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:6px 4px;border-bottom:1px solid var(--line);text-align:right}
+th:first-child,td:first-child{text-align:left}
+th{color:var(--mut);font-weight:500}
+.lnk{display:block;text-decoration:none;color:inherit}
+.lnk b{color:var(--acc)}
+ul{margin:0;padding-left:18px}li{margin:3px 0}
+.note{color:var(--mut);font-size:12px}
+.err{color:var(--mut)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>🔭 Astro Notes</h1>
+<p class="sub">천문 공개 데이터를 모으고 가공·분석해 기록하는 개인 노트</p>
+
+<div class="card" id="sw">
+  <h2>우주기상 <small id="swu">불러오는 중…</small></h2>
+  <div class="row">
+    <div class="kpi"><div class="l">지자기 Kp (3시간)</div><div class="v" id="kpv">–</div><div class="s" id="kps"></div></div>
+    <div class="kpi"><div class="l">태양풍 속도</div><div class="v" id="wv">–</div><div class="s" id="ws">km/s</div></div>
+  </div>
+  <div style="margin-top:12px"><svg id="kpc" viewBox="0 0 360 120" role="img" aria-label="최근 7일 Kp"></svg><div class="leg">최근 7일 Kp 지수(막대) · 4 이상은 활발, 5 이상은 지자기 폭풍(G1~)</div></div>
+  <div style="margin-top:10px"><svg id="wc" viewBox="0 0 360 100" role="img" aria-label="최근 7일 태양풍"></svg><div class="leg">최근 7일 태양풍 속도(km/s, 1시간 평균) · 약 400이 평소, 600 이상이면 빠른 흐름</div></div>
+</div>
+
+<div class="card" id="nc">
+  <h2>향후 60일 근접 소행성 <small id="ncu"></small></h2>
+  <div id="nct" class="err">불러오는 중…</div>
+  <div class="note" style="margin-top:6px">거리는 달까지 거리(LD=384,400km) 단위. 크기는 절대등급 H로 추정한 대략값(반사율 0.14 가정)이며 실제와 크게 다를 수 있습니다.</div>
+</div>
+
+<a class="card lnk" href="notes.html"><h2><b>📝 노트 보기 →</b></h2><div class="note">분석 글을 쌓는 곳. 첫 노트: 이 사이트에서 하려는 일과 앞으로 붙일 데이터 후보.</div></a>
+
+<div class="card">
+  <h2>관심 주제 후보</h2>
+  <ul>
+    <li>외계행성 통과 신호 — NASA TESS·Kepler 광도 곡선</li>
+    <li>변광성 밝기 변화 — AAVSO 공개 관측 자료</li>
+    <li>태양 흑점 주기 — SILSO 일별 흑점수</li>
+    <li>근접 소행성 통계 — JPL 근접통과(CAD) API</li>
+    <li>유성우·월상 달력 — 천문 계산</li>
+  </ul>
+  <div class="note" style="margin-top:8px">아직 확정된 주제는 없습니다. 하나씩 해보며 정합니다.</div>
+</div>
+
+<p class="note">데이터: <a href="https://services.swpc.noaa.gov/" target="_blank" rel="noopener">NOAA SWPC</a> · <a href="https://ssd-api.jpl.nasa.gov/doc/cad.html" target="_blank" rel="noopener">NASA/JPL CAD API</a>. 3시간마다 자동 갱신. 개인 학습용이며 공식 예보가 아닙니다.</p>
+</div>
+<script>
+var URL_='https://raw.githubusercontent.com/sgrA77/astro-notes/data/space.json';
+function $(i){return document.getElementById(i)}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function lvl(k){if(k>=9)return['G5 극심한 폭풍','#7f1d1d'];if(k>=8)return['G4 심한 폭풍','#b91c1c'];if(k>=7)return['G3 강한 폭풍','#dc2626'];if(k>=6)return['G2 중간 폭풍','#ea580c'];if(k>=5)return['G1 약한 폭풍','#d97706'];if(k>=4)return['다소 활발','#ca8a04'];return['조용','#16a34a']}
+function kpcol(k){return lvl(k)[1]}
+function ago(s){var d=(Date.now()-Date.parse(s))/60000;if(isNaN(d))return '';if(d<60)return Math.round(d)+'분 전';if(d<1440)return Math.round(d/60)+'시간 전';return Math.round(d/1440)+'일 전'}
+function bars(el,data,max,colf){
+  var W=360,H=120,pl=22,pb=14,n=data.length,bw=(W-pl)/n;
+  var h='';
+  for(var g=0;g<=max;g+=3){var y=H-pb-(H-pb-4)*g/max;h+='<line x1="'+pl+'" x2="'+W+'" y1="'+y+'" y2="'+y+'" stroke="currentColor" opacity=".12"/><text x="0" y="'+(y+3)+'" font-size="9" fill="currentColor" opacity=".6">'+g+'</text>'}
+  data.forEach(function(p,i){var v=Math.min(p[1],max),bh=(H-pb-4)*v/max;h+='<rect x="'+(pl+i*bw+.5)+'" y="'+(H-pb-bh)+'" width="'+Math.max(bw-1,1)+'" height="'+bh+'" rx="1" fill="'+colf(p[1])+'"><title>'+esc(p[0])+' Kp '+p[1]+'</title></rect>'});
+  el.innerHTML=h
+}
+function line(el,data,lo,hi){
+  var W=360,H=100,pl=30,pb=14,n=data.length;
+  var h='';
+  [lo,(lo+hi)/2,hi].forEach(function(g){var y=H-pb-(H-pb-4)*(g-lo)/(hi-lo);h+='<line x1="'+pl+'" x2="'+W+'" y1="'+y+'" y2="'+y+'" stroke="currentColor" opacity=".12"/><text x="0" y="'+(y+3)+'" font-size="9" fill="currentColor" opacity=".6">'+Math.round(g)+'</text>'});
+  var pts=data.map(function(p,i){var v=Math.max(lo,Math.min(hi,p[1]));return (pl+(W-pl)*i/Math.max(n-1,1)).toFixed(1)+','+(H-pb-(H-pb-4)*(v-lo)/(hi-lo)).toFixed(1)}).join(' ');
+  h+='<polyline points="'+pts+'" fill="none" stroke="var(--bar)" stroke-width="1.6"/>';
+  el.innerHTML=h
+}
+fetch(URL_+'?t='+Math.floor(Date.now()/300000)).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()}).then(function(d){
+  $('swu').textContent='갱신 '+ago(d.updated);
+  if(d.kp&&d.kp.length){
+    var last=d.kp[d.kp.length-1],L=lvl(last[1]);
+    $('kpv').innerHTML=last[1].toFixed(1)+' <span class="badge" style="background:'+L[1]+'">'+L[0]+'</span>';
+    $('kps').textContent=last[0].replace('T',' ').slice(0,16)+' UTC';
+    bars($('kpc'),d.kp,9,kpcol)
+  }else{$('kpv').textContent='–'}
+  if(d.wind&&d.wind.length){
+    var w=d.wind[d.wind.length-1];$('wv').textContent=w[1];$('ws').textContent='km/s · 밀도 '+w[2]+'/cm³ · '+w[0].replace('T',' ')+' UTC';
+    var vs=d.wind.map(function(x){return x[1]});line($('wc'),d.wind,Math.min(250,Math.min.apply(null,vs)),Math.max(700,Math.max.apply(null,vs)))
+  }
+  var c=d.cad||[];
+  if(!c.length){$('nct').textContent='60일 안에 0.05 au 이내 접근 정보가 없거나 불러오지 못했습니다.'}
+  else{
+    $('ncu').textContent=c.length+'건';
+    $('nct').className='';
+    $('nct').innerHTML='<table><tr><th>날짜(UTC)</th><th>이름</th><th>거리(LD)</th><th>속도</th><th>크기</th></tr>'+c.slice(0,20).map(function(x){return '<tr><td>'+esc(x.date.slice(5,16))+'</td><td>'+esc(x.des)+'</td><td>'+x.ld+'</td><td>'+x.v+'</td><td>'+(x.dm?(x.dm>=1000?(x.dm/1000).toFixed(1)+'km':x.dm+'m'):'–')+'</td></tr>'}).join('')+'</table>'+(c.length>20?'<div class="note">가까운 날짜순 상위 20건만 표시(전체 '+c.length+'건)</div>':'')
+  }
+}).catch(function(e){$('swu').textContent='불러오기 실패';$('nct').textContent='데이터를 불러오지 못했습니다 ('+e.message+'). 첫 수집 전이거나 일시적 오류일 수 있습니다.'});
+</script>
+</body>
+</html>
