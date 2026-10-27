@@ -2,12 +2,13 @@
 """ASTRO_FETCH.py - 우주기상(NOAA SWPC)·근접 소행성(JPL CAD) -> space.json (GitHub Actions)"""
 import json, time, datetime as dt, requests
 UA = {"User-Agent": "astro-notes (github.com/sgrA77/astro-notes)"}
+ERR = []
 def get(url):
     for i in range(3):
         try:
             r = requests.get(url, headers=UA, timeout=60); r.raise_for_status(); return r.json()
         except Exception as e:
-            print("::warning::", url, e); time.sleep(3)
+            print("::warning::", url, e); ERR.append("%s %s" % (url.split("/")[-1], str(e)[:80])); time.sleep(3)
     return None
 out = {"updated": dt.datetime.utcnow().strftime("%Y-%m-%dT%H:%MZ")}
 # 1) 행성간 지자기 지수 Kp (3시간 간격)
@@ -31,13 +32,16 @@ except Exception as e:
     out["err"].append("kp: %r" % e); print("kp fail", e)
 # 2) 태양풍 플라즈마 7일 -> 시간 평균
 try:
-    w = get("https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json")
+    w = None
+    for u in ("https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json", "https://services.swpc.noaa.gov/products/solar-wind/plasma-3-day.json", "https://services.swpc.noaa.gov/products/solar-wind/plasma-1-day.json", "https://services.swpc.noaa.gov/json/rtsw/rtsw_wind_1m.json"):
+        w = get(u)
+        if w: out["wind_src"] = u.split("/")[-1]; break
     if w:
         hrs = {}
         for r in w:
             try:
                 if isinstance(r, dict):
-                    t, den, spd = r["time_tag"][:13], r.get("density"), r.get("speed")
+                    t, den, spd = r["time_tag"][:13], r.get("density", r.get("proton_density")), r.get("speed", r.get("proton_speed"))
                 else:
                     if r[0] == "time_tag": continue
                     t, den, spd = r[0][:13], r[1], r[2]
@@ -69,5 +73,7 @@ if c and c.get("data"):
     print("cad", len(res))
 if not any(k in out for k in ("kp", "wind", "cad")):
     out["err"].append("no data fetched")
+json.dump(out, open("space.json", "w"), ensure_ascii=False)
+out["err"] += ERR
 json.dump(out, open("space.json", "w"), ensure_ascii=False)
 print("errors:", out["err"])
