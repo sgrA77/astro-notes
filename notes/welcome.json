@@ -1,0 +1,14 @@
+{"id":"welcome","title":"Astro Notes 시작하기","date":"2026-10-27","updated":"2026-10-27",
+"summary":["**천문 데이터를 모으고, 가공하고, 분석해 기록하는 개인 노트입니다.** 시민과학(citizen science)식으로 공개 데이터를 직접 다룹니다.","현재는 **우주기상(Kp·태양풍)과 근접 소행성**을 3시간마다 자동 수집해 메인에 표시합니다.","분석 결과는 이 `노트` 형식(표·차트·출처)으로 쌓아 갑니다."],
+"sections":[
+{"title":"1. 사이트 구성","bullets":["**메인(index.html):** 자동 수집한 최신 데이터(우주기상, 향후 60일 근접 소행성)와 관심 주제 목록.","**노트(notes.html):** 분석 글. 표·차트·출처가 있는 문서 형식으로 폴더에 JSON을 추가하면 늘어납니다.","**데이터 수집:** GitHub Actions가 3시간마다 `space.json`을 만들어 `data` 브랜치에 올립니다."]},
+{"title":"2. 앞으로 붙일 후보","table":{"head":["주제","데이터","난이도"],"center":false,"rows":[
+["외계행성 통과 신호","NASA TESS·Kepler 광도 곡선","중간"],
+["변광성 밝기 변화","AAVSO 공개 관측 자료","중간"],
+["태양 흑점 주기","SILSO 일별 흑점수","쉬움"],
+["근접 소행성 통계","JPL SBDB 근접통과(CAD) API","쉬움"],
+["유성우·월상 달력","천문 계산(Skyfield 등)","쉬움"]]},
+"bullets":["처음에는 **쉬운 것 한두 개를 끝까지** 해보고(수집 → 전처리 → 분석 → 노트), 익숙해지면 광도 곡선으로 넘어가는 순서를 추천합니다(제 의견)."]},
+{"title":"3. 규칙(메모)","bullets":["수치는 출처를 남기고, 해석은 **해석**이라고 구분해 적습니다.","측정 불확실성과 한계를 노트마다 적습니다.","자동 수집 데이터는 외부 서비스 상태에 따라 비어 있을 수 있습니다."]}],
+"sources":[{"n":1,"title":"NOAA SWPC 공개 데이터 서비스","url":"https://services.swpc.noaa.gov/"},{"n":2,"title":"NASA JPL SBDB Close-Approach Data API","url":"https://ssd-api.jpl.nasa.gov/doc/cad.html"},{"n":3,"title":"NASA Citizen Science","url":"https://science.nasa.gov/CitizenScience"}],
+"disclaimer":"개인 학습용 노트이며 연구 결과로 인용할 수 없습니다."}
